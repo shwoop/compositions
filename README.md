@@ -14,3 +14,7 @@ Setup dns in pihole:
 * pihole.home.domain
 * paperless.home.domain
 * trala.home.domain
+
+Everything currently uses http because CBA.
+
+![image of trala showing services](image.png)
