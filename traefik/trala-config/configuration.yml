@@ -1,0 +1,17 @@
+version: 3.3
+
+environment:
+  search_engine_url: https://duckduckgo.com/?q=
+  refresh_interval_seconds: 60
+  grouping:
+    enabled: true
+    columns: 3
+    tag_frequency_threshold: 0.9
+    min_services_per_group: 2
+  traefik:
+    api_host: http://traefik:8080
+
+# services:
+#   manual:
+#     - name: "GitHub"
+#       url: "https://github.com"

@@ -1,0 +1,15 @@
+# Pihole
+/pihole/etc-dnsmasq.d
+/pihole/etc-pihole
+/pihole/unound-config
+
+# Paperless
+/paperless/redisdata/*
+/paperless/pgdata/*
+/paperless/data/*
+/paperless/media/*
+/paperless/consume/*
+
+
+/zerobyte/var-lib-zerobyte/*
+**/.env

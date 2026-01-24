@@ -1,0 +1,58 @@
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - ./redisdata:/data
+
+  db:
+    image: docker.io/library/postgres:16
+    restart: unless-stopped
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: dbpass
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+      - broker
+    ports:
+      - "9000:8000"
+    volumes:
+      - ./data:/usr/src/paperless/data
+      - ${PAPERLESS_MEDIA_DIR}:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+    environment:
+      PAPERLESS_URL: http://paperless.${DOMAIN}
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.${DOMAIN}
+
+      # Database and Redis settings
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBPASS: dbpass
+      
+      # Security and Localization
+      PAPERLESS_SECRET_KEY: d0bc3c84-e589-43a4-bb7e-61b7c2a11589
+      PAPERLESS_TIME_ZONE: Europe/Paris
+      PAPERLESS_OCR_LANGUAGE: eng
+
+      PAPERLESS_FILENAME_FORMAT: '{created_year}/{document_type}/{correspondent}/{title}'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperless.rule=Host(`paperless.${DOMAIN}`)"
+      - "traefik.http.routers.paperless.entrypoints=web"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+      - "traefik.docker.network=traefik"
+    networks:
+      - traefik
+      - default
+
+networks:
+  traefik:
+    external: true

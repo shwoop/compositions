@@ -1,0 +1,24 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.22
+    container_name: zerobyte
+    restart: unless-stopped
+    networks:
+      - traefik
+    environment:
+      - TZ=Europe/Paris
+      - TRUSTED_ORIGINS=zerobyte.${DOMAIN}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zerobyte.rule=Host(`zerobyte.${DOMAIN}`)"
+      - "traefik.http.routers.zerobyte.entrypoints=web"
+      - "traefik.http.services.zerobyte.loadbalancer.server.port=4096"
+      - "traefik.http.services.zerobyte.loadbalancer.server.scheme=http"
+      - "traefik.docker.network=traefik"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./var-lib-zerobyte:/var/lib/zerobyte
+
+networks:
+  traefik:
+    external: true
