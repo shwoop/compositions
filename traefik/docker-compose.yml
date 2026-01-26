@@ -14,22 +14,29 @@ services:
 
       # EntryPoints
       - "--entrypoints.web.address=:80"
-      # - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.address=:443"
 
       # # HTTP -> HTTPS redirect
-      # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
       # # ACME / Let's Encrypt
       # - "--certificatesresolvers.le.acme.httpchallenge=true"
       # - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      # - "--certificatesresolvers.le.acme.email=admin@manjaro.home"
-      # - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.le.acme.dnschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge.provider=infomaniak"
+      - "--certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
+      
+
+      - "--certificatesresolvers.le.acme.email=admin@ferguson.fr"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
 
       # Dashboard
       - "--api.dashboard=true"
-      # - "--api.insecure=false"
       - "--api.insecure=true"
+      # - "--api.insecure=false"
+    environment:
+      - INFOMANIAK_ACCESS_TOKEN=${INFOMANIAK_ACCESS_TOKEN}
 
     ports:
       - "80:80"
@@ -41,16 +48,18 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./letsencrypt:/letsencrypt
+      - ./letsencrypt:/letsencrypt
 
     labels:
       # Traefik dashboard router
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
-      # - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.entrypoints=web"
-      # - "traefik.http.routers.traefik.tls.certresolver=le"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      # - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.tls.certresolver=le"
       - "traefik.http.routers.traefik.service=api@internal"
+
+      # - "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
   trala:
     image: ghcr.io/dannybouwers/trala:latest
@@ -72,9 +81,12 @@ services:
       # --- Traefik Labels to expose TraLa itself ---
       - "traefik.enable=true"
       - "traefik.http.routers.trala.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.trala.entrypoints=web"
+      - "traefik.http.routers.trala.entrypoints=websecure"
+      # - "traefik.http.routers.trala.entrypoints=web"
+      - "traefik.http.routers.trala.tls.certresolver=le"
+      - "traefik.docker.network=traefik"
       - "traefik.http.services.trala.loadbalancer.server.port=8080"
-      - "traefik.http.services.trala.loadbalancer.server.scheme=http"
+      # - "traefik.http.services.trala.loadbalancer.server.scheme=http"
 
 networks:
   traefik:

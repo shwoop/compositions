@@ -46,7 +46,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperless.rule=Host(`paperless.${DOMAIN}`)"
-      - "traefik.http.routers.paperless.entrypoints=web"
+      - "traefik.http.routers.paperless.entrypoints=websecure"
+      - "traefik.http.routers.paperless.tls.certresolver=le"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
       - "traefik.docker.network=traefik"
     networks:

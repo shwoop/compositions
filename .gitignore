@@ -13,3 +13,5 @@
 
 /zerobyte/var-lib-zerobyte/*
 **/.env
+
+/traefik/letsencrypt/*

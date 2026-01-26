@@ -11,7 +11,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zerobyte.rule=Host(`zerobyte.${DOMAIN}`)"
-      - "traefik.http.routers.zerobyte.entrypoints=web"
+      - "traefik.http.routers.zerobyte.entrypoints=websecure"
+      - "traefik.http.routers.zerobyte.tls.certresolver=le"
       - "traefik.http.services.zerobyte.loadbalancer.server.port=4096"
       - "traefik.http.services.zerobyte.loadbalancer.server.scheme=http"
       - "traefik.docker.network=traefik"
