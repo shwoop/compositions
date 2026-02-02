@@ -19,6 +19,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./var-lib-zerobyte:/var/lib/zerobyte
+      # volumes to backup
+      - ${PAPERLESS_MEDIA_DIR}:/data/paperless/media
 
 networks:
   traefik:
