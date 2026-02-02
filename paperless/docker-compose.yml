@@ -29,8 +29,8 @@ services:
       - ./export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
     environment:
-      PAPERLESS_URL: http://paperless.${DOMAIN}
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.${DOMAIN}
+      PAPERLESS_URL: https://paperless.${DOMAIN}
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: https://paperless.${DOMAIN}
 
       # Database and Redis settings
       PAPERLESS_REDIS: redis://broker:6379
