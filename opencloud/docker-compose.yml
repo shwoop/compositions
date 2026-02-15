@@ -1,0 +1,42 @@
+services:
+  opencloud:
+    image: opencloudeu/opencloud-rolling:latest
+    container_name: opencloud
+    restart: unless-stopped
+    entrypoint:
+      - /bin/sh
+    # command: ["-c", "opencloud init || true; opencloud server"]
+    command: ["-c", "opencloud server"]
+    networks:
+      - traefik
+    environment:
+      OC_URL: https://oc.${DOMAIN}
+      OC_LOG_LEVEL: info
+      OC_LOG_COLOR: "false"
+      OC_LOG_PRETTY: "false"
+
+      # TLS is terminated by traefik
+      PROXY_TLS: "false"
+      OPENCLOUD_INSECURE: "true"
+
+      # Admin credentials
+      IDM_ADMIN_PASSWORD: ${IDM_ADMIN_PASSWORD}
+      IDM_CREATE_DEMO_USERS: "false"
+
+      # Timezone
+      TZ: Europe/Paris
+    volumes:
+      - ./config:/etc/opencloud
+      - ./data:/var/lib/opencloud
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.opencloud.rule=Host(`oc.${DOMAIN}`)"
+      - "traefik.http.routers.opencloud.entrypoints=websecure"
+      - "traefik.http.routers.opencloud.tls.certresolver=le"
+      - "traefik.http.services.opencloud.loadbalancer.server.port=9200"
+      - "traefik.http.services.opencloud.loadbalancer.server.scheme=http"
+      - "traefik.docker.network=traefik"
+
+networks:
+  traefik:
+    external: true

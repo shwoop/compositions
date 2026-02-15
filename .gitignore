@@ -15,3 +15,7 @@
 **/.env
 
 /traefik/letsencrypt/*
+
+# opencloud
+/opencloud/data
+/opencloud/config
