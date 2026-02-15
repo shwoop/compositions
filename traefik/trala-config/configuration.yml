@@ -11,7 +11,17 @@ environment:
   traefik:
     api_host: http://traefik:8080
 
-# services:
-#   manual:
-#     - name: "GitHub"
-#       url: "https://github.com"
+services:
+  overides:
+    - service: traefik-traefik
+      group: infra
+    - service: pihole@docker
+      group: infra
+
+  manual:
+    - name: "mafreebox"
+      url: "http://mafreebox.freebox.fr/"
+      group: infra
+    - name: "scaleway"
+      url: "https://www.scaleway.com/"
+      group: infra
