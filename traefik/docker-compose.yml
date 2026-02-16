@@ -24,11 +24,11 @@ services:
       # - "--certificatesresolvers.le.acme.httpchallenge=true"
       # - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.le.acme.dnschallenge=true"
-      - "--certificatesresolvers.le.acme.dnschallenge.provider=infomaniak"
+      - "--certificatesresolvers.le.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       
 
-      - "--certificatesresolvers.le.acme.email=admin@ferguson.fr"
+      - "--certificatesresolvers.le.acme.email=admin@${DOMAIN}"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
 
       # Dashboard
@@ -36,7 +36,7 @@ services:
       - "--api.insecure=true"
       # - "--api.insecure=false"
     environment:
-      - INFOMANIAK_ACCESS_TOKEN=${INFOMANIAK_ACCESS_TOKEN}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
 
     ports:
       - "80:80"
