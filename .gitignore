@@ -19,3 +19,9 @@
 # opencloud
 /opencloud/data
 /opencloud/config
+
+# immich
+/immich/redisdata/*
+/immich/pgdata/*
+/immich/model-cache/*
+/immich/upload/*
