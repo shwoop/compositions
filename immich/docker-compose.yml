@@ -20,7 +20,7 @@ services:
     image: ghcr.io/immich-app/immich-machine-learning:release
     restart: unless-stopped
     volumes:
-      - ./model-cache:/cache
+      - ${MODEL_CACHE}:/cache
 
   server:
     image: ghcr.io/immich-app/immich-server:release
