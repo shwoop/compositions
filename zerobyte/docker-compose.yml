@@ -21,6 +21,7 @@ services:
       - ./var-lib-zerobyte:/var/lib/zerobyte
       # volumes to backup
       - ${PAPERLESS_MEDIA_DIR}:/data/paperless/media
+      - ${IMMICH_IMAGES}:/data/immich/images
 
 networks:
   traefik:
