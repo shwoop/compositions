@@ -8,7 +8,7 @@ services:
     environment:
       TZ: Europe/Paris
       FTLCONF_webserver_api_password: ${FTLCONF_webserver_api_password}
-      FTLCONF_dns_upstreams: unbound;212.27.40.240;212.27.40.241
+      FTLCONF_dns_upstreams: unbound#53
       FTLCONF_dns_listeningMode: all
     cap_add:
       - NET_ADMIN
@@ -37,7 +37,7 @@ services:
     ports:
       - "5335:53"
     volumes:
-      - './unbound-config:/opt/ubound/etc/unbound'
+      - './unbound-config/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro'
     restart: unless-stopped
 
 networks:

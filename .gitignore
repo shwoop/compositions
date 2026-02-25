@@ -1,7 +1,7 @@
 # Pihole
 /pihole/etc-dnsmasq.d
 /pihole/etc-pihole
-/pihole/unound-config
+/pihole/unbound-config
 
 # Paperless
 /paperless/redisdata/*
