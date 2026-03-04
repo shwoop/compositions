@@ -25,3 +25,5 @@
 /immich/pgdata/*
 /immich/model-cache/*
 /immich/upload/*
+
+/authentik/redisdata

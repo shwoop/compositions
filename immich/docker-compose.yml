@@ -41,12 +41,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       REDIS_HOSTNAME: redis
       IMMICH_MACHINE_LEARNING_URL: http://machine-learning:3003
-      OAUTH_ENABLED: "true"
-      OAUTH_ISSUER_URL: https://auth.${DOMAIN}/application/o/immich/
-      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
-      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
-      OAUTH_AUTO_REGISTER: "true"
-      OAUTH_BUTTON_TEXT: "Sign in with Authentik"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich.rule=Host(`pics.${DOMAIN}`)"
