@@ -39,6 +39,17 @@ services:
       AUTHENTIK_POSTGRESQL__USER: authentik
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__PASSWORD: ${DB_PASSWORD}
+  
+  # ldap:
+  #   image: ghcr.io/goauthentik/ldap:2026.2
+  #   restart: unless-stopped
+  #   environment:
+  #     AUTHENTIK_HOST: http://server:9000
+  #     AUTHENTIK_TOKEN: ${LDAP_OUTPOST_TOKEN}
+  #     AUTHENTIK_INSECURE: "true"   # internal docker-network traffic only
+  #   networks:
+  #     - default
+  #     - ldap
 
   db:
     image: docker.io/library/postgres:16
@@ -61,3 +72,5 @@ networks:
     external: true
   tunnel:
     external: true
+  # ldap:
+  #   external: true

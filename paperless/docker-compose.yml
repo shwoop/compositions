@@ -54,6 +54,39 @@ services:
       - traefik
       - default
 
+  paperless-ai:
+    image: clusterzx/paperless-ai:latest
+    # image: paperless-ai-dev:d497005
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    depends_on:
+      - webserver
+    volumes:
+      - ./paperless-ai-data:/app/data
+    # environment:
+      # PAPERLESS_AI_INITIAL_SETUP: "1"
+      # PAPERLESS_API_URL: http://webserver:8000
+      # PAPERLESS_API_URL: http://paperless.${DOMAIN}:8000
+      # PAPERLESS_API_TOKEN: ${PAPERLESS_API_TOKEN}
+      # AI_PROVIDER: custom
+      # CUSTOM_BASE_URL: http://192.168.1.127:8080/v1
+      # CUSTOM_API_KEY: not-needed
+      # CUSTOM_MODEL: mlx-community/Qwen2.5-7B-Instruct-4bit
+      # SCAN_INTERVAL: "*/30 * * * *"
+      # ADD_AI_PROCESSED_TAG: "true"
+      # AI_PROCESSED_TAG_NAME: ai-processed
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperless-ai.rule=Host(`paperless-ai.${DOMAIN}`)"
+      - "traefik.http.routers.paperless-ai.entrypoints=websecure"
+      - "traefik.http.routers.paperless-ai.tls.certresolver=le"
+      - "traefik.http.services.paperless-ai.loadbalancer.server.port=3000"
+      - "traefik.docker.network=traefik"
+    networks:
+      - traefik
+      - default
+
 networks:
   traefik:
     external: true
