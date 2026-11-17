@@ -1,7 +1,6 @@
-# Pihole
+# Pihole (unbound-config/ and its conf files are tracked)
 /pihole/etc-dnsmasq.d
 /pihole/etc-pihole
-/pihole/unbound-config
 
 # Paperless
 /paperless/redisdata/*

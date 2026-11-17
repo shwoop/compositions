@@ -1,7 +1,7 @@
 services:
   pihole:
     image: pihole/pihole:latest
-    ports: 
+    ports:
       - "53:53/tcp"
       - "53:53/udp"
       - "90:80/tcp"
@@ -18,6 +18,9 @@ services:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
     restart: unless-stopped
+    depends_on:
+      unbound:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)"
@@ -37,8 +40,20 @@ services:
     ports:
       - "5335:53"
     volumes:
+      # Custom tuned config. Because it exists, the image's auto-generated
+      # config is skipped (the image only auto-includes a-records.conf /
+      # srv-records.conf / forward-records.conf; *.conf wildcard is off).
+      - './unbound-config/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro'
       - './unbound-config/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro'
     restart: unless-stopped
+    healthcheck:
+      # drill uses the root-server hints in unbound itself, so it stays green
+      # even if upstream internet is temporarily unavailable.
+      test: ["CMD", "drill", "@127.0.0.1", "cloudflare.com"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
 
 networks:
   traefik:
